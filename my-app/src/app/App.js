@@ -14,31 +14,41 @@ class App extends Component {
       this.state = {products:[]};
         //bind functions
       this.loadData = this.loadData.bind(this);
+      this.productList = this.productList.bind(this);
 
       this.loadData();
     }
 
     loadData = () => {
-      http.getProducts().then(products => {
-          console.log(products);
+      var self = this;
+      http.getProducts().then(data => {
+          self.setState({products: data})
       }, err => {
 
       });
+    }
+    productList = () => {
+      const list = this.state.products.map((product) =>
+
+          <div className="col-sm-4" key={product._id}>
+            <Product title={product.title} price={product.price} imgUrl={product.imgUrl}/>
+          </div>
+
+
+        );
+        return (list);
     }
 
   render() {
     return (
       <div className="App">
         <div className="App-header">
-
           <h1 className="App-title">Welcome to Soloman Sea Products</h1>
         </div>
         <div className="container App-main">
           <div className="row">
-          <Product price="35.00" title="face and body mask" imgUrl="https://www.foodmatters.com/media/images/assets/bentonite.jpg"/>
-          <Product price="20.00" title="bath and salt scrub" imgUrl="https://www.foodmatters.com/media/images/assets/bentonite.jpg"/>
-          <Product price="15.00" title="volcanic clay" imgUrl="https://www.foodmatters.com/media/images/assets/bentonite.jpg"/>
-        </div>
+            {this.productList()}
+          </div>
         </div>
       </div>
     );
